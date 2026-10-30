@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR Tools for Chrome — youkiti</title>
+    <meta name="description"
+        content="Free, open-source Chrome extensions for every step of a systematic review: search, screening, data extraction and risk of bias.">
+    <style>
+        :root {
+            --text: #2c3e50;
+            --text-secondary: #5f6368;
+            --bg: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --border: #dadce0;
+            --link: #1a73e8;
+            --ti: #96d244;
+            --qb: #5bc6e2;
+            --de: #f23497;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 48px 20px 64px;
+        }
+
+        .lang-switch {
+            display: flex;
+            justify-content: flex-end;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .lang-switch button {
+            font: inherit;
+            font-size: 0.875rem;
+            padding: 6px 14px;
+            min-height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: var(--bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .lang-switch button[aria-pressed="true"] {
+            background: var(--text);
+            border-color: var(--text);
+            color: #ffffff;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+        }
+
+        .facts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .fact {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .fact strong {
+            display: block;
+            font-size: 1.4rem;
+        }
+
+        .fact span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .line {
+            margin-top: 40px;
+            list-style: none;
+        }
+
+        .station {
+            position: relative;
+            padding: 0 0 28px 44px;
+        }
+
+        .station::before {
+            content: "";
+            position: absolute;
+            left: 13px;
+            top: 30px;
+            bottom: 0;
+            width: 6px;
+            background: var(--c);
+        }
+
+        .station .dot {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 7px solid var(--c);
+            background: var(--bg);
+        }
+
+        .card {
+            border: 2px solid var(--c);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .card img {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+        }
+
+        .step {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .card h2 {
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .card p {
+            margin: 6px 0 12px;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            align-items: center;
+        }
+
+        .install {
+            display: inline-block;
+            padding: 8px 16px;
+            min-height: 40px;
+            border-radius: 20px;
+            background: var(--text);
+            color: #ffffff;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .install:hover {
+            background: #1a252f;
+        }
+
+        a {
+            color: var(--link);
+        }
+
+        .next {
+            position: relative;
+            padding-left: 44px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            color: var(--text-secondary);
+        }
+
+        .next .dot {
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 4px dashed #b8c0ca;
+        }
+
+        .chip {
+            border: 2px dashed #b8c0ca;
+            border-radius: 16px;
+            padding: 2px 12px;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 480px) {
+            .facts {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+            <button type="button" data-set-lang="ja" aria-pressed="false">日本語</button>
+        </div>
+
+        <header>
+            <h1 data-i18n="title">Free Chrome extensions for every step of your systematic review</h1>
+            <p data-i18n="lead">Open source, no server, no coding. Your data stays in your own Google Sheets and Drive.</p>
+            <div class="facts">
+                <div class="fact"><strong data-i18n="fact1h">Free apps</strong><span data-i18n="fact1">No subscription or license fee.</span></div>
+                <div class="fact"><strong data-i18n="fact2h">Any AI</strong><span data-i18n="fact2">Bring your own API key and pay only for the model you choose.</span></div>
+            </div>
+        </header>
+
+        <ol class="line">
+            <li class="station" style="--c: var(--qb)">
+                <span class="dot" aria-hidden="true"></span>
+                <div class="card">
+                    <img src="icons/qb.png" alt="">
+                    <div>
+                        <div class="step" data-i18n="s1">Step 1 · Search</div>
+                        <h2>SR Query Builder Plugin</h2>
+                        <p data-i18n="qb">Turn your protocol into a PubMed search, check it, and convert it for CENTRAL, Embase, ClinicalTrials.gov and ICTRP.</p>
+                        <div class="actions">
+                            <a class="install" href="https://chromewebstore.google.com/detail/sr-query-builder-plugin/bckokafmjighegpjiocopkagghppnjld" data-i18n="add">Add to Chrome</a>
+                            <a href="https://youkiti.github.io/sr-query-builder-plugin/help.html" data-i18n="help">Guide</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="station" style="--c: var(--ti)">
+                <span class="dot" aria-hidden="true"></span>
+                <div class="card">
+                    <img src="icons/ti.png" alt="">
+                    <div>
+                        <div class="step" data-i18n="s2">Step 2 · Screen</div>
+                        <h2>TiAb Review Plugin</h2>
+                        <p data-i18n="ti">Title/abstract and full-text screening with LLM batch screening, active learning, blinded dual review and PRISMA 2020 counts.</p>
+                        <div class="actions">
+                            <a class="install" href="https://chromewebstore.google.com/detail/tiab-review-plugin/alejlnlfflogpnabpbplmnojgoeeabij" data-i18n="add">Add to Chrome</a>
+                            <a href="https://youkiti.github.io/tiab-review-plugin/help.html" data-i18n="help">Guide</a>
+                            <a href="https://arxiv.org/abs/2604.08602" data-i18n="paper">Paper (arXiv)</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="station" style="--c: var(--de)">
+                <span class="dot" aria-hidden="true"></span>
+                <div class="card">
+                    <img src="icons/de.png" alt="">
+                    <div>
+                        <div class="step" data-i18n="s3">Step 3 · Extract &amp; risk of bias</div>
+                        <h2>SR Data Extraction Plugin</h2>
+                        <p data-i18n="de">Extract data and assess risk of bias with AI, with every answer linked to a quote in the PDF.</p>
+                        <div class="actions">
+                            <a class="install" href="https://chromewebstore.google.com/detail/sr-data-extraction-plugin/ibpbkgffgkmdmflamhadbcfjgfljjgip" data-i18n="add">Add to Chrome</a>
+                            <a href="https://youkiti.github.io/sr-data-extraction-plugin/help.html" data-i18n="help">Guide</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ol>
+
+        <div class="next">
+            <span class="dot" aria-hidden="true"></span>
+            <strong data-i18n="next">Next stops:</strong>
+            <span class="chip" data-i18n="ma">Meta-analysis</span>
+            <span class="chip" data-i18n="grade">Certainty of evidence</span>
+        </div>
+
+        <footer>
+            <p data-i18n="footer">Developed by Yuki Kataoka and the Scientific Research WorkS Peer Support Group (SRWS-PSG).</p>
+            <p><a href="https://youkiti.github.io/">youkiti.github.io</a></p>
+        </footer>
+    </div>
+
+    <script>
+        const ja = {
+            title: '系統的レビューの各ステップを支える、無料のChrome拡張機能',
+            lead: 'オープンソースで、サーバー不要・プログラミング不要。データはご自身の Google スプレッドシートと Drive に保存されます。',
+            fact1h: 'アプリは無料',
+            fact1: 'サブスクリプションやライセンス料はかかりません。',
+            fact2h: 'AIは自由に選べる',
+            fact2: 'ご自身の API キーを使い、選んだモデルの利用料だけを支払います。',
+            s1: 'ステップ1 · 検索',
+            qb: '研究プロトコルから PubMed 検索式を作成・検証し、CENTRAL / Embase / ClinicalTrials.gov / ICTRP 向けに変換します。',
+            s2: 'ステップ2 · スクリーニング',
+            ti: 'タイトル・抄録と全文のスクリーニングに対応。LLM による一括判定、アクティブラーニング、盲検化ダブルレビュー、PRISMA 2020 の集計ができます。',
+            s3: 'ステップ3 · データ抽出とバイアスリスク評価',
+            de: 'AI でデータ抽出とバイアスリスク評価を行い、すべての回答を PDF 内の引用箇所にひも付けます。',
+            add: 'Chrome に追加',
+            help: '使い方ガイド',
+            paper: '論文（arXiv）',
+            next: 'この先：',
+            ma: 'メタアナリシス',
+            grade: 'エビデンスの確実性',
+            footer: '片岡裕貴と Scientific Research WorkS Peer Support Group（SRWS-PSG）が開発しています。'
+        };
+        const nodes = document.querySelectorAll('[data-i18n]');
+        const en = {};
+        nodes.forEach((el) => { en[el.dataset.i18n] = el.textContent; });
+
+        function apply(lang) {
+            const dict = lang === 'ja' ? ja : en;
+            nodes.forEach((el) => { el.textContent = dict[el.dataset.i18n]; });
+            document.documentElement.lang = lang;
+            document.title = lang === 'ja' ? 'SR ツール for Chrome — youkiti' : 'SR Tools for Chrome — youkiti';
+            document.querySelectorAll('[data-set-lang]').forEach((b) => {
+                b.setAttribute('aria-pressed', String(b.dataset.setLang === lang));
+            });
+        }
+
+        const param = new URLSearchParams(location.search).get('lang');
+        const browser = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+        apply(param === 'ja' || param === 'en' ? param : (browser.toLowerCase().startsWith('ja') ? 'ja' : 'en'));
+
+        document.querySelectorAll('[data-set-lang]').forEach((b) => {
+            b.addEventListener('click', () => apply(b.dataset.setLang));
+        });
+    </script>
+</body>
+
+</html>
